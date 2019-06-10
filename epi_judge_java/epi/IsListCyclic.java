@@ -3,11 +3,29 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
+import java.util.ArrayList;
+import java.util.HashSet;
 public class IsListCyclic {
 
   public static ListNode<Integer> hasCycle(ListNode<Integer> head) {
-    // TODO - you fill in here.
-    return null;
+
+    // Store nodes in arraylist
+    HashSet<ListNode<Integer>> list = new HashSet<>();
+
+    // Initialise pointer pointing to current node
+    ListNode<Integer> curr = head;
+
+    // Iterate through linkedlist and store nodes into arraylist
+    while (curr != null) {
+      if (!list.contains(curr)) {
+        list.add(curr);
+      } else {
+        break;
+      }
+      curr = curr.next;
+    }
+
+    return curr;  // Time complexity = O(n). Space complexity = O(n).
   }
   @EpiTest(testDataFile = "is_list_cyclic.tsv")
   public static void HasCycleWrapper(TimedExecutor executor,

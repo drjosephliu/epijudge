@@ -4,21 +4,56 @@ import epi.test_framework.EpiUserType;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedList;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 public class LruCache {
-  LruCache(final int capacity) {}
-  public Integer lookup(Integer key) {
-    // TODO - you fill in here.
-    return 0;
+
+  HashMap<Integer, Integer> isbnToPrice;
+  LinkedList<Integer> keys;
+  int capacity;
+
+  LruCache(final int capacity) {
+    isbnToPrice = new HashMap<>(capacity);
+    keys = new LinkedList<>();
+    this.capacity = capacity;
   }
+
+  public Integer lookup(Integer key) {
+    if (!isbnToPrice.containsKey(key)) {
+      return -1;
+    }
+    keys.remove(key);
+    keys.add(key);
+    return isbnToPrice.get(key);
+  }
+
   public void insert(Integer key, Integer value) {
-    // TODO - you fill in here.
+    if (!isbnToPrice.containsKey(key)) {
+      if (isbnToPrice.size() == capacity) {
+        Integer oldestKey = keys.remove();
+        isbnToPrice.remove(oldestKey);
+      }
+      keys.add(key);
+      isbnToPrice.put(key, value);
+      return;
+    }  
+    keys.remove(key);
+    keys.add(key);
     return;
   }
+
   public Boolean erase(Object key) {
-    // TODO - you fill in here.
+    if (!isbnToPrice.containsKey(key)) {
+      return false;
+    }
+    isbnToPrice.remove(key);
+    keys.remove(key);
     return true;
   }
+
   @EpiUserType(ctorParams = {String.class, int.class, int.class})
   public static class Op {
     String code;

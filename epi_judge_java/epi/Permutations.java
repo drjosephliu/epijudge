@@ -6,13 +6,36 @@ import epi.test_framework.GenericTest;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.ArrayList;
 public class Permutations {
   @EpiTest(testDataFile = "permutations.tsv")
 
   public static List<List<Integer>> permutations(List<Integer> A) {
     // TODO - you fill in here.
-    return null;
+    List<List<Integer>> result = new ArrayList<>();
+    List<Integer> currentPermutation = new ArrayList<>();
+    permutationsHelper(result, currentPermutation, 0, A);
+    return result;
   }
+
+  public static void permutationsHelper(List<List<Integer>> result,
+      List<Integer> currentPermutation, int n, List<Integer> A) {
+    if (n == A.size()) {
+      List<Integer> newPermutation = new ArrayList<>(currentPermutation);
+      result.add(newPermutation);
+      return;
+    }
+
+    for (int i = 0; i < A.size(); i++) {
+      if (!currentPermutation.contains(A.get(i))) {
+        currentPermutation.add(A.get(i));
+        permutationsHelper(result, currentPermutation, n + 1, A);
+        currentPermutation.remove(currentPermutation.size() - 1);
+      }
+    }
+    return; // Time = O(n x n!), space = O(n)
+  }
+
   @EpiTestComparator
   public static BiPredicate<List<List<Integer>>, List<List<Integer>>> comp =
       (expected, result) -> {

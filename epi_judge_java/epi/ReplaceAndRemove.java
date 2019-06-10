@@ -7,9 +7,72 @@ import java.util.List;
 public class ReplaceAndRemove {
 
   public static int replaceAndRemove(int size, char[] s) {
-    // TODO - you fill in here.
-    return 0;
+
+    int aCount = 0, writeIdx = 0;
+
+    for (int i = 0; i < size; i++) {
+      if (s[i] != 'b' && s[i] != '\0') {
+        s[writeIdx++] = s[i];
+      }
+
+      if (s[i] == 'a') {
+        aCount++;
+      }
+    }
+
+    int finalSize = writeIdx + aCount;
+    int currIdx = writeIdx - 1;
+    writeIdx = finalSize - 1;
+
+    while (currIdx >= 0) {
+      if (s[currIdx] == 'a') {
+        s[writeIdx--] = 'd';
+        s[writeIdx--] = 'd';
+      }
+      else {
+        s[writeIdx--] = s[currIdx];
+      }
+      currIdx--;
+    }
+
+    return finalSize;
+
+    
   }
+
+
+
+  // public static int replaceAndRemove(int size, char[] s) {
+
+  //   int writeIdx = 0, aCount = 0;
+  //   for (int i = 0; i < s.length; i++) {
+  //     if (s[i] != 'b' && s[i] != '\0') {
+  //       s[writeIdx++] = s[i];
+  //     }
+
+  //     if (s[i] == 'a') {
+  //       aCount++;
+  //     }
+  //   }
+  //   int currIdx = writeIdx - 1;
+  //   writeIdx = writeIdx + aCount - 1;
+  //   int finalSize = writeIdx + 1;
+  //   char[] result = new char[finalSize];
+
+  //   while (currIdx >= 0) {
+  //     if (s[currIdx] == 'a') {
+  //       s[writeIdx--] = 'd';
+  //       s[writeIdx--] = 'd';
+  //     } else {
+  //       s[writeIdx--] = s[currIdx];
+  //     }
+  //     currIdx--;
+  //   }
+
+  //   return finalSize;
+  // }
+
+
   @EpiTest(testDataFile = "replace_and_remove.tsv")
   public static List<String>
   replaceAndRemoveWrapper(TimedExecutor executor, Integer size, List<String> s)

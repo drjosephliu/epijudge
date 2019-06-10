@@ -4,12 +4,35 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
+import java.util.HashSet;
 public class LowestCommonAncestorWithParent {
 
   public static BinaryTree<Integer> LCA(BinaryTree<Integer> node0,
                                         BinaryTree<Integer> node1) {
-    // TODO - you fill in here.
-    return null;
+
+    HashSet<BinaryTree<Integer>> n0Ancestors = new HashSet<BinaryTree<Integer>>();
+    int n0Depth = 0, n1Depth = 0;
+
+    if (node1 == node0) {
+      return node1;
+    }
+    if (node0 == null || node1 == null) return null;
+
+    do {
+      n0Ancestors.add(node0);
+      node0 = node0.parent;
+      n0Depth++;
+    } while (node0 != null);
+
+    do {
+      if (n0Ancestors.contains(node1)) {
+        return node1;
+      }
+      node1 = node1.parent;
+      n1Depth++;
+    } while (node1 != null);
+
+    return null; // Time = O(n1 + n2), space = O(n1)
   }
   @EpiTest(testDataFile = "lowest_common_ancestor.tsv")
   public static int lcaWrapper(TimedExecutor executor, BinaryTree<Integer> tree,

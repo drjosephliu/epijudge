@@ -37,11 +37,120 @@ public class SearchMaze {
 
   public enum Color { WHITE, BLACK }
 
-  public static List<Coordinate> searchMaze(List<List<Color>> maze,
+   public static List<Coordinate> searchMaze(List<List<Color>> maze,
                                             Coordinate s, Coordinate e) {
     // TODO - you fill in here.
-    return Collections.emptyList();
+    List<Coordinate> result = new ArrayList<>();
+    result.add(s);
+    maze.get(s.x).set(s.y, Color.BLACK);
+    if (!searchMazeHelper(maze, s, e, result)){
+      result.remove(result.size() - 1);
+    } 
+    return result;
   }
+
+
+  public static boolean searchMazeHelper(List<List<Color>> maze, Coordinate s, Coordinate e, List<Coordinate> path) {
+    if (s.x == e.x && s.y == e.y) {
+      return true;
+    }
+    
+    
+
+    Coordinate lastPosition = path.get(path.size() - 1);
+    Coordinate up = new Coordinate(s.x, s.y - 1);
+    Coordinate down = new Coordinate(s.x, s.y + 1);
+    Coordinate left = new Coordinate(s.x - 1, s.y);
+    Coordinate right = new Coordinate(s.x + 1, s.y);
+
+    path.add(up);
+    boolean successUp = false;
+    if (pathValid(maze, up)) {
+      successUp = searchMazeHelper(maze, up, e, path);
+    }
+    if (!successUp) path.remove(path.size() - 1);
+
+    path.add(right);
+    boolean successRight = false; 
+    if (pathValid(maze, right)) {
+
+      successRight = searchMazeHelper(maze, right, e, path);
+    }
+    if (!successRight) path.remove(path.size() - 1);
+
+    path.add(left);
+    boolean successLeft = false;
+    if (pathValid(maze, left)) {
+      successLeft = searchMazeHelper(maze, left, e, path);
+    }
+    if (!successLeft) path.remove(path.size() - 1);
+
+    
+    path.add(down);
+    boolean successDown = false;
+    if (pathValid(maze, down)) {
+      successDown = searchMazeHelper(maze, down, e, path);
+    }
+    if (!successDown) path.remove(path.size() - 1);
+
+    return successUp || successDown || successLeft || successRight;
+  }
+
+  public static boolean pathValid(List<List<Color>> maze, Coordinate p) {
+    int mazeX = maze.size();
+    int mazeY = maze.get(0).size();
+    if (p.x < 0 || p.x >= maze.size() || p.y < 0 || p.y >= maze.get(0).size()) {
+      return false;
+    }
+
+    if (maze.get(p.x).get(p.y) == Color.BLACK) {
+      return false;
+    }
+
+    maze.get(p.x).set(p.y, Color.BLACK);
+    return true;
+  }
+
+
+  // public static List<Coordinate> searchMaze(List<List<Color>> maze,
+  //                                           Coordinate s, Coordinate e) {
+  //   // TODO - you fill in here.
+  //   List<Coordinate> path = new ArrayList<>();
+
+  //   maze.get(s.x).set(s.y, Color.BLACK);
+  //   path.add(s);
+  //   if(!searchMazeHelper(maze, s, e, path)) {
+  //     path.remove(path.size() - 1);
+  //   }
+  //   return path;
+  // }
+
+  // private static boolean searchMazeHelper(List<List<Color>> maze, Coordinate cur, Coordinate e, List<Coordinate> path) {
+  //   if (cur.equals(e)) {
+  //     return true;
+  //   }
+
+  //   final int[][] SHIFT = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+  //   for (int[] s : SHIFT) {
+  //     Coordinate next = new Coordinate(cur.x + s[0], cur.y + s[1]);
+  //     if (isFeasible(next, maze)) {
+  //       maze.get(next.x).set(next.y, Color.BLACK);
+  //       path.add(next);
+  //       if (searchMazeHelper(maze, next, e, path)) {
+  //         return true;
+  //       }
+  //       path.remove(path.size() - 1);
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  private static boolean isFeasible(Coordinate cur, List<List<Color>> maze) {
+    return cur.x >= 0 && cur.x < maze.size() && cur.y >= 0 
+        && cur.y < maze.get(cur.x).size()
+        && maze.get(cur.x).get(cur.y) == Color.WHITE;
+  }
+
   public static boolean pathElementIsFeasible(List<List<Integer>> maze,
                                               Coordinate prev, Coordinate cur) {
     if (!(0 <= cur.x && cur.x < maze.size() && 0 <= cur.y &&

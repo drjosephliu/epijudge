@@ -4,6 +4,7 @@ import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
 import java.util.List;
+import java.util.ArrayList;
 public class RefuelingSchedule {
   private static final int MPG = 20;
 
@@ -12,7 +13,20 @@ public class RefuelingSchedule {
   public static int findAmpleCity(List<Integer> gallons,
                                   List<Integer> distances) {
     // TODO - you fill in here.
-    return 0;
+    
+    int currDiff = 0, ample = 0;
+    for (int i = 0; i < gallons.size(); i++) {
+      int diff = gallons.get(i) * MPG - distances.get(i);
+      if (diff >= 0 && currDiff == 0) {
+        ample = i; 
+      }
+      currDiff = currDiff + diff;
+
+      if (currDiff < 0) {
+        currDiff = 0;
+      }
+    }
+    return ample; // Time = O(n), space = O(1)
   }
   @EpiTest(testDataFile = "refueling_schedule.tsv")
   public static void findAmpleCityWrapper(TimedExecutor executor,

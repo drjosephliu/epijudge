@@ -7,7 +7,30 @@ public class MaxTrappedWater {
 
   public static int getMaxTrappedWater(List<Integer> heights) {
     // TODO - you fill in here.
-    return 0;
+    int left = 0, right = heights.size() - 1;
+    int maxVolume = 0;
+
+    while (left < right) {
+      int volume = 0;
+      int height = heights.get(left) < heights.get(right) ? heights.get(left) :
+        heights.get(right);
+
+      volume = (right - left) * height;
+      maxVolume = Math.max(volume, maxVolume);
+      
+      if (heights.get(left) < heights.get(right)) {
+        left++;
+      }
+      else if (heights.get(right) < heights.get(left)) {
+        right--;
+      }
+      else {
+        left++;
+        right--;
+      }
+      
+    }
+    return maxVolume; // Time = O(n), space = O(1)
   }
 
   public static void main(String[] args) {

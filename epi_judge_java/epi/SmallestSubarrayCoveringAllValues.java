@@ -3,7 +3,7 @@ import epi.test_framework.EpiTest;
 import epi.test_framework.GenericTest;
 import epi.test_framework.TestFailure;
 import epi.test_framework.TimedExecutor;
-import java.util.List;
+import java.util.*;
 public class SmallestSubarrayCoveringAllValues {
 
   public static class Subarray {
@@ -21,7 +21,53 @@ public class SmallestSubarrayCoveringAllValues {
   findSmallestSequentiallyCoveringSubset(List<String> paragraph,
                                          List<String> keywords) {
     // TODO - you fill in here.
-    return new Subarray(0, 0);
+    HashMap<String, List<Integer>> keywordToIndices = new HashMap<>();
+    for (String keyword : keywords) {
+      keywordToIndices.put(keyword, new ArrayList<Integer>());
+    }
+
+    for (int i = 0; i < paragraph.size(); i++) {
+      String word = paragraph.get(i);
+
+      if (keywordToIndices.keySet().contains(word)) {
+        List<Integer> indices = keywordToIndices.get(word);
+        indices.add(i);
+        keywordToIndices.put(word, indices); 
+      }
+    }
+
+    int minDiff = Integer.MAX_VALUE;
+    int minStart = 0, minEnd = paragraph.size() - 1;
+
+    for (int i = 0; i < keywordToIndices.get(keywords.get(0)).size(); i++) {
+      int startIdx = keywordToIndices.get(keywords.get(0)).get(i);
+      int endIdx = startIdx;
+      boolean validSequence = true;
+
+      for (int j = 1; j < keywords.size(); j++) {
+        List<Integer> indices = keywordToIndices.get(keywords.get(j));
+        int k = 0;
+      
+        while (k < indices.size() && endIdx > indices.get(k)) {
+          k++;
+        }
+        
+        if (k >= indices.size()) {
+          validSequence = false;
+          break;
+        }
+
+        endIdx = indices.get(k);
+      }
+      
+      if ((endIdx - startIdx) < minDiff && validSequence) {
+        minDiff = endIdx - startIdx;
+        minStart = startIdx;
+        minEnd = endIdx;
+      }
+    }
+
+    return new Subarray(minStart, minEnd);
   }
   @EpiTest(testDataFile = "smallest_subarray_covering_all_values.tsv")
   public static int findSmallestSequentiallyCoveringSubsetWrapper(

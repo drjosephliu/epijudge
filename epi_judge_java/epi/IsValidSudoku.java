@@ -35,7 +35,7 @@ public class IsValidSudoku {
             }
             else if (i >= 0 && i <= 2 && j >= 6 && j <= 8) {
                 List<Integer> squareThree = squaresList.get(2);
-                squarethree.add(partialAssignment.get(i).get(j));
+                squareThree.add(partialAssignment.get(i).get(j));
             }
             else if (i >= 3 && i <= 5 && j >= 0 && j <= 2) {
                 List<Integer> squareFour = squaresList.get(3);
@@ -66,7 +66,9 @@ public class IsValidSudoku {
 
     for (int i = 0; i < partialAssignment.size(); i++) {
         
-      if (!checkValid(partialAssignment.get(i)) || !checkValid(columnsList.get(i) || !checkValid(squaresList.get(i)) {
+      if (!checkValid(partialAssignment.get(i)) ||
+          !checkValid(columnsList.get(i)) ||
+          !checkValid(squaresList.get(i))) {
           return false;
       }
     }

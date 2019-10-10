@@ -56,6 +56,7 @@ public class SortedArraysMerge {
         }
       });
 
+    // Add first elem of each list to minHeap
     for (int i = 0; i < iters.size(); i++) {
       if (iters.get(i).hasNext()) {
         minHeap.add(new ArrayEntry(iters.get(i).next(), i));
@@ -64,6 +65,7 @@ public class SortedArraysMerge {
 
     List<Integer> result = new ArrayList<>();
 
+    // Remove elem from minHeap and replace with new value in list
     while (!minHeap.isEmpty()) {
       ArrayEntry min = minHeap.poll();
 
